@@ -12,29 +12,21 @@ namespace Asset
     public static class Asset
     {
         /// <summary>
-        /// Load Json file named <typeparamref name="T"/> 
-        /// and deserialize it as <typeparamref name="T"/>.
-        /// </summary>
-        public static async Task<T> LoadData<T>()
-            => Newtonsoft.Json.JsonConvert.DeserializeObject<T>(
-                (await LoadAssetAsync<TextAsset>(typeof(T).Name)).text);
-
-        /// <summary>
         /// Load addressable assets of type <typeparamref name="T"/> and Name or Label <paramref name="key"/>.
         /// </summary>
-        public static async Task<IList<T>> LoadAssetsAssync<T>(this object key)
+        public static async Task<IList<T>> LoadAssets<T>(this object key)
             => await Addressables.LoadAssetsAsync<T>(key, null).Task;
 
         /// <summary>
         /// Load addressable asset of type <typeparamref name="T"/> and Name or Label <paramref name="key"/>.
         /// </summary>
-        public static async Task<T> LoadAssetAsync<T>(this object key)
+        public static async Task<T> LoadAsset<T>(this object key)
             => await Addressables.LoadAssetAsync<T>(key).Task;
 
         /// <summary>
         /// Instantiate <see cref="GameObject"/> from addressables with Name or Label <paramref name="key"/>.
         /// </summary>
-        public static async Task<GameObject> InstantiateAsync(
+        public static async Task<GameObject> InstantiateAsset(
             this object key,
             Transform parent = null,
             bool instantiateInWorldSpace = false,
