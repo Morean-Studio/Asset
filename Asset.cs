@@ -12,6 +12,12 @@ namespace Asset
     public static class Asset
     {
         /// <summary>
+        /// Load addressable asset of type <typeparamref name="T"/> and Name or Label <paramref name="key"/>.
+        /// </summary>
+        public static async Task<bool> ResourceExists<T>(this object key)
+            => (await Addressables.LoadResourceLocationsAsync(key, typeof(T)).Task).Count > 0;
+
+        /// <summary>
         /// Load addressable assets of type <typeparamref name="T"/> and Name or Label <paramref name="key"/>.
         /// </summary>
         public static async Task<IList<T>> LoadAssets<T>(this object key)
