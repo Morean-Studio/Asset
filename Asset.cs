@@ -23,8 +23,14 @@ namespace Asset
         public static async Task<IList<T>> LoadAssets<T>(this object key)
             => await Addressables.LoadAssetsAsync<T>(key, null).Task;
 
+        public static Object LoadAssetFromScene<T>()
+            => Object.FindFirstObjectByType(typeof(T));
+
         public static Object[] LoadAssetsFromScene<T>(FindObjectsSortMode sortMode = FindObjectsSortMode.None)
             => Object.FindObjectsByType(typeof(T), sortMode);
+
+        public static Object LoadAssetFromResources<T>(string path)
+            => Resources.Load(path, typeof(T));
 
         /// <summary>
         /// Load addressable asset of type <typeparamref name="T"/> and Name or Label <paramref name="key"/>.
