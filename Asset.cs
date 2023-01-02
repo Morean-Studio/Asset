@@ -52,6 +52,17 @@ namespace Asset
                 parent,
                 instantiateInWorldSpace,
                 trackHandle).Task;
+
+        public static async Task<GameObject[]> LoadAndInstantiateAssets(this object key)
+        {
+            var assets = await key.LoadAssets<GameObject>();
+            var objects = new GameObject[assets.Count];
+            for (int i = 0; i < assets.Count; i++)
+            {
+                objects[i] = Object.Instantiate(assets[i]);
+            }
+            return objects;
+        }
     }
 }
 #endif
