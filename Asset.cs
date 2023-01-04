@@ -1,6 +1,6 @@
 ﻿#if ASSET
+using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -14,25 +14,25 @@ namespace Asset
         /// <summary>
         /// Load addressable asset of type <typeparamref name="T"/> and Name or Label <paramref name="key"/>.
         /// </summary>
-        public static async Task<bool> ResourceExists<T>(this object key)
-            => (await Addressables.LoadResourceLocationsAsync(key, typeof(T)).Task).Count > 0;
+        public static async UniTask<bool> ResourceExists<T>(this object key)
+            => (await Addressables.LoadResourceLocationsAsync(key, typeof(T)).ToUniTask()).Count > 0;
 
         /// <summary>
         /// Load addressable assets of type <typeparamref name="T"/> and Name or Label <paramref name="key"/>.
         /// </summary>
-        public static async Task<IList<T>> LoadAssets<T>(this object key)
-            => await Addressables.LoadAssetsAsync<T>(key, null).Task;
+        public static async UniTask<IList<T>> LoadAssets<T>(this object key)
+            => await Addressables.LoadAssetsAsync<T>(key, null).ToUniTask();
 
         /// <summary>
         /// Load addressable asset of type <typeparamref name="T"/> and Name or Label <paramref name="key"/>.
         /// </summary>
-        public static async Task<T> LoadAsset<T>(this object key)
-            => await Addressables.LoadAssetAsync<T>(key).Task;
+        public static async UniTask<T> LoadAsset<T>(this object key)
+            => await Addressables.LoadAssetAsync<T>(key).ToUniTask();
 
         /// <summary>
         /// InstantiateAsync <see cref="GameObject"/> from addressables with Name or Label <paramref name="key"/>.
         /// </summary>
-        public static async Task<GameObject> InstantiateAsync(
+        public static async UniTask<GameObject> InstantiateAsync(
             this object key,
             Transform parent = null,
             bool instantiateInWorldSpace = false,
@@ -42,9 +42,9 @@ namespace Asset
                 key,
                 parent,
                 instantiateInWorldSpace,
-                trackHandle).Task;
+                trackHandle).ToUniTask();
 
-        public static async Task<GameObject[]> LoadAndInstantiateAssets(this object key)
+        public static async UniTask<GameObject[]> LoadAndInstantiateAssets(this object key)
         {
             var assets = await key.LoadAssets<GameObject>();
             var objects = new GameObject[assets.Count];
