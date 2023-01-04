@@ -1,10 +1,10 @@
-﻿#if MOREAN_ASSET
+﻿#if MOREAN_ASSETS
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-namespace Morean.Asset
+namespace Morean.Assets
 {
     /// <summary>
     /// Addressable assets utilities.
