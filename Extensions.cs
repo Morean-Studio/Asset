@@ -1,15 +1,15 @@
-﻿#if ASSET
+﻿#if MOREAN_ASSET
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-namespace Asset
+namespace Morean.Asset
 {
     /// <summary>
     /// Addressable assets utilities.
     /// </summary>
-    public static class Asset
+    public static class Extensions
     {
         /// <summary>
         /// Load addressable asset of type <typeparamref name="T"/> and Name or Label <paramref name="key"/>.
