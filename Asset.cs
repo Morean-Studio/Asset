@@ -11,15 +11,6 @@ namespace Asset
     /// </summary>
     public static class Asset
     {
-        public static Object LoadAssetFromScene<T>()
-            => Object.FindFirstObjectByType(typeof(T));
-
-        public static Object[] LoadAssetsFromScene<T>(FindObjectsSortMode sortMode = FindObjectsSortMode.None)
-            => Object.FindObjectsByType(typeof(T), sortMode);
-
-        public static Object LoadAssetFromResources<T>(string path)
-            => Resources.Load(path, typeof(T));
-
         /// <summary>
         /// Load addressable asset of type <typeparamref name="T"/> and Name or Label <paramref name="key"/>.
         /// </summary>
@@ -39,9 +30,9 @@ namespace Asset
             => await Addressables.LoadAssetAsync<T>(key).Task;
 
         /// <summary>
-        /// Instantiate <see cref="GameObject"/> from addressables with Name or Label <paramref name="key"/>.
+        /// InstantiateAsync <see cref="GameObject"/> from addressables with Name or Label <paramref name="key"/>.
         /// </summary>
-        public static async Task<GameObject> InstantiateAsset(
+        public static async Task<GameObject> InstantiateAsync(
             this object key,
             Transform parent = null,
             bool instantiateInWorldSpace = false,
@@ -59,7 +50,7 @@ namespace Asset
             var objects = new GameObject[assets.Count];
             for (int i = 0; i < assets.Count; i++)
             {
-                objects[i] = Object.Instantiate(assets[i]);
+                objects[i] = GameObject.Instantiate(assets[i]);
             }
             return objects;
         }
