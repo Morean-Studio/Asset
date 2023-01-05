@@ -50,7 +50,9 @@ namespace Morean.Assets
             var objects = new GameObject[assets.Count];
             for (int i = 0; i < assets.Count; i++)
             {
-                objects[i] = GameObject.Instantiate(assets[i]);
+                var instance = GameObject.Instantiate(assets[i]);
+                instance.name = assets[i].name;
+                objects[i] = instance;
             }
             return objects;
         }
