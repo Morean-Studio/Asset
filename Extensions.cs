@@ -56,6 +56,9 @@ namespace Morean.Assets
             }
             return objects;
         }
+
+        public static void Release(this object obj)
+            => Addressables.Release(obj);
     }
 }
 #endif
