@@ -59,6 +59,9 @@ namespace Morean.Assets
 
         public static void Unload(this object obj)
             => Addressables.Release(obj);
+
+        public static void UnloadInstance(this GameObject obj)
+            => Addressables.ReleaseInstance(obj);
     }
 }
 #endif
