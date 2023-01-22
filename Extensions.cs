@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Morean.Assets
 {
@@ -12,22 +13,21 @@ namespace Morean.Assets
     public static class Extensions
     {
         /// <summary>
-        /// Load addressable asset of type <typeparamref name="T"/> and Name or Label <paramref name="key"/>.
-        /// </summary>
-        public static async UniTask<bool> ResourceExists<T>(this object key)
-            => (await Addressables.LoadResourceLocationsAsync(key, typeof(T)).ToUniTask()).Count > 0;
-
-        /// <summary>
         /// Load addressable assets of type <typeparamref name="T"/> and Name or Label <paramref name="key"/>.
         /// </summary>
         public static async UniTask<IList<T>> LoadAssets<T>(this object key)
             => await Addressables.LoadAssetsAsync<T>(key, null).ToUniTask();
 
         /// <summary>
-        /// Load addressable asset of type <typeparamref name="T"/> and Name or Label <paramref name="key"/>.
+        /// Load addressable asset of type <typeparamref name="T"/> and Name or Label as <paramref name="key"/>.
         /// </summary>
-        public static async UniTask<T> LoadAsset<T>(this object key)
-            => await Addressables.LoadAssetAsync<T>(key).ToUniTask();
+        /// <returns>Handle to use when releasing the asset and Asset itself.</returns>
+        public static async UniTask<KeyValuePair<AsyncOperationHandle, T>> LoadAsset<T>(this object key)
+        {
+            var handle = Addressables.LoadAssetAsync<T>(key);
+            var asset = await handle.ToUniTask();
+            return new KeyValuePair<AsyncOperationHandle, T>(handle, asset);
+        }
 
         /// <summary>
         /// InstantiateAsync <see cref="GameObject"/> from addressables with Name or Label <paramref name="key"/>.
@@ -44,24 +44,11 @@ namespace Morean.Assets
                 instantiateInWorldSpace,
                 trackHandle).ToUniTask();
 
-        public static async UniTask<GameObject[]> LoadAndInstantiateAssets(this object key)
-        {
-            var assets = await key.LoadAssets<GameObject>();
-            var objects = new GameObject[assets.Count];
-            for (int i = 0; i < assets.Count; i++)
-            {
-                var instance = GameObject.Instantiate(assets[i]);
-                instance.name = assets[i].name;
-                objects[i] = instance;
-            }
-            return objects;
-        }
+        public static void Unload(this AsyncOperationHandle handle)
+            => Addressables.Release(handle);
 
-        public static void Unload(this object obj)
-            => Addressables.Release(obj);
-
-        public static void UnloadInstance(this GameObject obj)
-            => Addressables.ReleaseInstance(obj);
+        public static void UnloadInstance(this GameObject instance)
+            => Addressables.ReleaseInstance(instance);
     }
 }
 #endif
