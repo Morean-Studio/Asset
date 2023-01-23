@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.ResourceManagement.ResourceProviders;
+using UnityEngine.SceneManagement;
 
 namespace Morean.Assets
 {
@@ -12,6 +14,8 @@ namespace Morean.Assets
     /// </summary>
     public static class Extensions
     {
+        #region Asset
+
         /// <summary>
         /// Load addressable assets of type <typeparamref name="T"/> and Name or Label <paramref name="key"/>.
         /// </summary>
@@ -29,6 +33,13 @@ namespace Morean.Assets
             return new KeyValuePair<AsyncOperationHandle, T>(handle, asset);
         }
 
+        public static void Unload(this AsyncOperationHandle handle)
+            => Addressables.Release(handle);
+
+        #endregion
+
+        #region GameObject
+
         /// <summary>
         /// InstantiateAsync <see cref="GameObject"/> from addressables with Name or Label <paramref name="key"/>.
         /// </summary>
@@ -44,11 +55,27 @@ namespace Morean.Assets
                 instantiateInWorldSpace,
                 trackHandle).ToUniTask();
 
-        public static void Unload(this AsyncOperationHandle handle)
-            => Addressables.Release(handle);
-
         public static void UnloadInstance(this GameObject instance)
             => Addressables.ReleaseInstance(instance);
+
+        #endregion
+
+        #region Scene
+
+        public static async UniTask<KeyValuePair<AsyncOperationHandle, SceneInstance>> LoadScene(
+            this object key,
+            LoadSceneMode loadMode = LoadSceneMode.Additive,
+            bool activateOnLoad = true)
+        {
+            var handle = Addressables.LoadSceneAsync(key, loadMode, activateOnLoad);
+            var scene = await handle.ToUniTask();
+            return new KeyValuePair<AsyncOperationHandle, SceneInstance>(handle, scene);
+        }
+
+        public static void UnloadScene(this AsyncOperationHandle handle)
+            => Addressables.UnloadSceneAsync(handle);
+
+        #endregion
     }
 }
 #endif
