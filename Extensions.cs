@@ -33,7 +33,7 @@ namespace Morean.Assets
             return new KeyValuePair<AsyncOperationHandle, T>(handle, asset);
         }
 
-        public static void Unload(this AsyncOperationHandle handle)
+        public static void UnloadAsset(this AsyncOperationHandle handle)
             => Addressables.Release(handle);
 
         #endregion
@@ -62,14 +62,14 @@ namespace Morean.Assets
 
         #region Scene
 
-        public static async UniTask<KeyValuePair<AsyncOperationHandle, SceneInstance>> LoadScene(
+        public static async UniTask<AsyncOperationHandle> LoadScene(
             this object key,
             LoadSceneMode loadMode = LoadSceneMode.Additive,
             bool activateOnLoad = true)
         {
             var handle = Addressables.LoadSceneAsync(key, loadMode, activateOnLoad);
-            var scene = await handle.ToUniTask();
-            return new KeyValuePair<AsyncOperationHandle, SceneInstance>(handle, scene);
+            await handle.ToUniTask();
+            return handle;
         }
 
         public static void UnloadScene(this AsyncOperationHandle handle)
