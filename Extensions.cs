@@ -25,7 +25,7 @@ namespace Morean.Assets
         /// <summary>
         /// Load addressable asset of type <typeparamref name="T"/> and Name or Label as <paramref name="key"/>.
         /// </summary>
-        /// <returns>Handle to use when releasing the asset and Asset itself.</returns>
+        /// <returns>Handle to use when releasing the asset and the Asset.</returns>
         public static async UniTask<KeyValuePair<AsyncOperationHandle, T>> LoadAsset<T>(this object key)
         {
             var handle = Addressables.LoadAssetAsync<T>(key);
